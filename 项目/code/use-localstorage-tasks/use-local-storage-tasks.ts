@@ -1,12 +1,11 @@
-import { useInterval, useLocalStorageState } from 'ahooks';
-import { Options } from 'ahooks/lib/createUseStorageState';
-import { useEffect, useState } from 'react';
+import { useInterval, useLocalStorageState } from "ahooks";
+import { Options } from "ahooks/lib/createUseStorageState";
+import { useEffect, useState } from "react";
 import {
+  AsyncTaskStatus,
   getAsyncTaskStatus,
   GetAsyncTaskStatusResponse,
-  TASK_STATUS_FAIL,
-  TASK_STATUS_SUCCESS,
-} from '../request/get-async-task';
+} from "../request/get-async-task";
 
 export type AsyncTaskMap = Map<string, string>;
 export type AsyncTaskArray = Array<[string, string]>;
@@ -25,7 +24,7 @@ export default function useLocalStorageAsyncTask(
     asyncQueryRequest?: (taskId: string) => Promise<GetAsyncTaskStatusResponse>;
     /** 异步任务结束后的回调 */
     callback?: (asyncRes: GetAsyncTaskStatusResponse) => void;
-  },
+  }
 ) {
   const delay = options?.delay ?? 3000;
   const enableInterval = options?.enable ?? true;
@@ -34,10 +33,10 @@ export default function useLocalStorageAsyncTask(
   const [interval, setInterval] = useState<number | undefined>(undefined);
   const [progressMsg, setProgressMsg] = useState<string | undefined>(undefined);
   const [asyncTask, setAsyncTask] = useLocalStorageState<AsyncTaskArray>(
-    'asyncTask',
+    "asyncTask",
     {
       ...options,
-    },
+    }
   );
   const taskId = new Map(asyncTask).get(key);
 
@@ -59,12 +58,12 @@ export default function useLocalStorageAsyncTask(
   const fetchAsyncTaskStatus = options?.asyncQueryRequest ?? getAsyncTaskStatus;
 
   const asyncQueryStatus = async (taskId?: string) => {
-    if (typeof taskId === 'undefined') return;
+    if (typeof taskId === "undefined") return;
     const res = await fetchAsyncTaskStatus(taskId);
-    setProgressMsg(res?.values);
+    setProgressMsg(res?.message);
     if (
-      res.taskStatus === TASK_STATUS_SUCCESS ||
-      res.taskStatus === TASK_STATUS_FAIL
+      res.taskStatus === AsyncTaskStatus.SUCCESS ||
+      res.taskStatus === AsyncTaskStatus.FAIL
     ) {
       clearAsyncTask();
       setInterval(undefined);
@@ -81,7 +80,7 @@ export default function useLocalStorageAsyncTask(
       setInterval(undefined);
       return;
     }
-    if (typeof taskId !== 'undefined' && enableInterval) {
+    if (typeof taskId !== "undefined" && enableInterval) {
       setInterval(delay);
     }
   }, [taskId, enableInterval]);
