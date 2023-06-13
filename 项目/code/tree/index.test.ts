@@ -1,5 +1,5 @@
 import {
-  getLeafsFromTreeData,
+  getChildrenFromTreeData,
   getParentFromTreeData,
   getTreeDataNode,
   loopTreeList,
@@ -188,7 +188,7 @@ describe("loopTreeList", () => {
 
 describe("getLeafsFromTreeList", () => {
   it("should return an array of leaf nodes for the given id", () => {
-    const leafs = getLeafsFromTreeData(tree, 2);
+    const leafs = getChildrenFromTreeData(tree, 2);
 
     expect(leafs).toEqual([
       { id: 4, name: "Node 4", parentId: 2 },
@@ -197,7 +197,7 @@ describe("getLeafsFromTreeList", () => {
   });
 
   it("should return an empty array if the id is not found", () => {
-    const leafs = getLeafsFromTreeData(tree, 8);
+    const leafs = getChildrenFromTreeData(tree, 8);
 
     expect(leafs).toEqual([]);
   });

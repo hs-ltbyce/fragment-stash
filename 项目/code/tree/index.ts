@@ -103,21 +103,21 @@ export const loopTreeList = <T extends TreeDataItem<{ [index: string]: any }>>(
  * @param list
  * @param idKey 指定节点id
  */
-export const getLeafsFromTreeData = <
+export const getChildrenFromTreeData = <
   T extends TreeDataItem<{ [index: string]: any }>,
   K extends keyof T
 >(
   treeList: T[],
   id: T[K]
 ): T[] => {
-  const leafs: T[] = [];
+  const childrens: T[] = [];
   const node = getTreeDataNode(treeList, "id" as keyof T, id);
   if (node && node.children?.length) {
     loopTreeList(node.children, (item) => {
-      leafs.push(item as T);
+      childrens.push(item as T);
     });
   }
-  return leafs;
+  return childrens;
 };
 
 export const getParentFromTreeData = <
