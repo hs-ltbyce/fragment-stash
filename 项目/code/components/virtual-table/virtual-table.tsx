@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { VariableSizeGrid as Grid } from "react-window";
-import { Table, Tooltip } from "antd";
+import { Empty, Table, Tooltip } from "antd";
 import type { TableProps } from "antd";
 import ResizeObserver from "rc-resize-observer";
 import classNames from "classnames";
@@ -85,6 +85,20 @@ const VirtualTable = <RecordType extends object>(
       }) => void;
     }
   ) => {
+    if (!dataSource.length)
+      return (
+        <div
+          style={{
+            height: `${scroll.y}px`,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Empty />
+        </div>
+      );
+
     const totalHeight = dataSource.length * rowHeight;
 
     return (
